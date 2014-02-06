@@ -2,8 +2,11 @@
   "name": "Gruntproject",
   "version": "0.1.0",
   "author": "Jerome Lachaud",
-  "description": "Gruntfile for Wordpress Theme devellopement",
-  "repository" :  { "type" : "git", "url" : "http://github.com/isaacs/npm.git" },
+  "description": "Gruntfile for Wordpress Theme development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeromelachaud/Gruntfile_wp.git"
+  },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-uglify": "~0.3.2",
@@ -20,6 +23,6 @@
     "grunt-preprocess": "~4.0.0",
     "load-grunt-tasks": "~0.2.1",
     "grunt-contrib-compass": "~0.7.0",
-    "grunt-contrib-imagemin": "~0.5.0",
-  }
+    "grunt-contrib-imagemin": "~0.5.0"
+  }  
 }
