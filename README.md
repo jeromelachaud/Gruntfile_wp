@@ -1,6 +1,6 @@
-MyGruntfile
+Gruntfile_wp
 ===========
 
-My generic Gruntfile. 
+Gruntfile for Wordpress Theme development
 
-Definitively WIP.
+WIP.
