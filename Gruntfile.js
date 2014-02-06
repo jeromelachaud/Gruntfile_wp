@@ -9,20 +9,20 @@ module.exports = function(grunt) {
     // Déclartion des répertoires
     conf: {
       path: { 
-        // SrcRoot: '../src/',                              // Root du dossier Sources
-        SrcFont: 'fonts',                                   // Font Directory
-        BuildImg: 'images/build',                           // Build Images
-        SrcImg: 'images/sources',                           // Sources Images
-        BuildJS: 'javascripts/build',                       // Build Javascript
-        VendJS: 'javascripts/build',                        // Build Javascript
-        SrcJS: 'javascripts/sources',                       // Sources Javascript
-        VenJS: 'javascripts/vendor',                        // Vendor Javascript sources
-        SrcCSS: 'styles/sass',                              // Sources CSS
-        BuildCSS: 'styles/build',                           // Build CSS
-        SrcSass: 'styles/sass',                             // Sources Sass
-        VenCSS: 'styles/vendor',                            // Build CSS
-        CompassCSS '<%= conf.path.VenCSS %>/compass',       // Compass directory
-        CompassCfg: '<%= conf.path.CompassCSS %>config.rb', // Fichier de config de Compass
+        // SrcRoot: '../src/',                                 // Root du dossier Sources
+        SrcFont: '../fonts',                                   // Font Directory
+        BuildImg: '../images/build',                           // Build Images
+        SrcImg: '../images/sources',                           // Sources Images
+        BuildJS: '../javascripts/build',                       // Build Javascript
+        VendJS: '../javascripts/build',                        // Build Javascript
+        SrcJS: '../javascripts/sources',                       // Sources Javascript
+        VenJS: '../javascripts/vendor',                        // Vendor Javascript sources
+        SrcCSS: '../styles/sass',                              // Sources CSS
+        BuildCSS: '../styles/build',                           // Build CSS
+        SrcSass: '../styles/sass',                             // Sources Sass
+        VenCSS: '../styles/vendor',                            // Build CSS
+        // CompassCSS '<%= conf.path.VenCSS %>/compass',       // Compass directory
+        // CompassCfg: '<%= conf.path.CompassCSS %>config.rb', // Fichier de config de Compass
       },
       banner: '/* <%=pkg.name %> - v<%= pkg.version %>\n'+
       ' * Author:<%= pkg.author %>\n'+
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                 '<%= conf.path.SrcCSS %>/*.css',
                 '<%= conf.path.BuildRoot %>/**.*'],
         tasks: ['dev'],
-       }        
+       },        
       stylesheets: {
         files: ['<%= conf.path.SrcSass %>/*.*',
                 '<%= conf.path.SrcJS %>/**.*',
