@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-  // Charge toutes les tâches grâce au plug 'load-grunt-tasks'
+  // Load all tasks thanks to 'load-grunt-tasks' plug-in
   require('load-grunt-tasks')(grunt);
 
   // Project configuration.
@@ -9,17 +9,20 @@ module.exports = function(grunt) {
     // Déclartion des répertoires
     conf: {
       path: { 
-        SrcRoot: '../src/',                             // Root du dossier Sources
-        SrcImg: '../img/',                              // Sources Images
-        SrcJS: '../src/js',                             // Sources Javascript
-        SrcCSS: '../src/css',                           // Sources CSS
-        SrcSass:"../src/sass",                          // Sources Sass
-        SassCfg: '<%= conf.path.SrcRoot %>config.rb',   // Fichier de config de Compass
-        BuildRoot: '../build/',                         // Root du dossier du build
-        BuildImg: '../build/img',                       // Build Images
-        BuildJS: '../build/js',                         // Build Javascript
-        BuildCSS: '../build/css',                       // Build CSS
-
+        // SrcRoot: '../src/',                              // Root du dossier Sources
+        SrcFont: 'fonts',                                   // Font Directory
+        BuildImg: 'images/build',                           // Build Images
+        SrcImg: 'images/sources',                           // Sources Images
+        BuildJS: 'javascripts/build',                       // Build Javascript
+        VendJS: 'javascripts/build',                        // Build Javascript
+        SrcJS: 'javascripts/sources',                       // Sources Javascript
+        VenJS: 'javascripts/vendor',                        // Vendor Javascript sources
+        SrcCSS: 'styles/sass',                              // Sources CSS
+        BuildCSS: 'styles/build',                           // Build CSS
+        SrcSass: 'styles/sass',                             // Sources Sass
+        VenCSS: 'styles/vendor',                            // Build CSS
+        CompassCSS '<%= conf.path.VenCSS %>/compass',       // Compass directory
+        CompassCfg: '<%= conf.path.CompassCSS %>config.rb', // Fichier de config de Compass
       },
       banner: '/* <%=pkg.name %> - v<%= pkg.version %>\n'+
       ' * Author:<%= pkg.author %>\n'+
@@ -38,19 +41,26 @@ module.exports = function(grunt) {
 
     // Je te Watch et je déclanche toutes les tâches
     watch: {
-      scripts: {
-        files: ['<%= conf.path.SrcRoot %>*.html',
-                '<%= conf.path.SrcSass %>/*.*',
+      stylesheets: {
+        files: ['<%= conf.path.SrcSass %>/*.*',
                 '<%= conf.path.SrcJS %>/**.*',
                 '<%= conf.path.SrcCSS %>/*.css',
                 '<%= conf.path.BuildRoot %>/**.*'],
         tasks: ['dev'],
-          options: {
-            livereload: true,
-            spawn: false,
-          },
        }        
+      stylesheets: {
+        files: ['<%= conf.path.SrcSass %>/*.*',
+                '<%= conf.path.SrcJS %>/**.*',
+                '<%= conf.path.SrcCSS %>/*.css',
+                '<%= conf.path.BuildRoot %>/**.*'],
+        tasks: ['dev'],
+     }         
     },
+  
+        // options: {
+        //   livereload: true,
+        //   spawn: false,
+        // },
 
     /* ------    DEV    ------ */
 
@@ -65,6 +75,18 @@ module.exports = function(grunt) {
           keepalive:false,
           livereload:true,
           open:true,
+        },
+      }
+    },
+
+    // Compass config
+    compass: {
+      dist: {
+        options: {
+          basePath: '<%= conf.path.SrcRoot %>',
+          config: '<%= conf.path.SassCfg %>'
+          //config: '../src/config.rb'
+
         },
       }
     },
@@ -87,17 +109,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // Compass config
-    compass: {
-      dist: {
-        options: {
-          basePath: '<%= conf.path.SrcRoot %>',
-          config: '<%= conf.path.SassCfg %>'
-          //config: '../src/config.rb'
-
-        },
-      }
-    },
 
     // Je vérifie tes CSS
     csslint: {
@@ -244,20 +255,6 @@ module.exports = function(grunt) {
       }
     },
 
-    grunticon: {
-       myIcons: {
-         files: [{
-          expand: true,
-          cwd: '<%= conf.path.BuildImg %>/',  // Src matches are relative to this path
-          src: ['**/*.svg'],                  // Actual patterns to match
-          dest: '<%= conf.path.BuildImg %>/', // Destination path prefix
-        }],
-        options: {
-          previewhtml: 'index.html',
-        }
-      }
-    } 
-  
   });
 
   // Enregistrements des tâches
