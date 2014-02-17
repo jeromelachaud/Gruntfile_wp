@@ -14,16 +14,15 @@ module.exports = function(grunt) {
         BuildImg: '../images/build',                           // Build Images
         SrcImg: '../images/sources',                           // Sources Images
         BuildJS: '../javascripts/build',                       // Build Javascript
-        VendJS: '../javascripts/build',                        // Build Javascript
-        SrcJS: '../javascripts/sources',                       // Sources Javascript
-        VenJS: '../javascripts/vendor',                        // Vendor Javascript sources
-        SrcCSS: '../styles/sass',                              // Sources CSS
-        BuildCSS: '../styles/build',                           // Build CSS
-        SrcSass: '../styles/sass',                             // Sources Sass
-        VenCSS: '../styles/vendor',                            // Build CSS
+        SrcJS: '../javascripts/src',                           // Sources Javascript
+        VenJS: '../javascripts/lib',                           // Vendor Javascript sources
+        BuildCSS: '../stylesheets/build',                      // Build CSS
+        SrcSass: '../stylesheets',                             // Sources Sass
+        VenCSS: '../stylesheets/lib',                          // Build CSS
         // CompassCSS '<%= conf.path.VenCSS %>/compass',       // Compass directory
         // CompassCfg: '<%= conf.path.CompassCSS %>config.rb', // Fichier de config de Compass
       },
+      
       banner: '/* <%=pkg.name %> - v<%= pkg.version %>\n'+
       ' * Author:<%= pkg.author %>\n'+
       ' * <%= grunt.template.today("mm-dd-yyyy, HH:MM:ss") %> */\n'
@@ -41,74 +40,32 @@ module.exports = function(grunt) {
 
     // Je te Watch et je déclanche toutes les tâches
     watch: {
-      stylesheets: {
-        files: ['<%= conf.path.SrcSass %>/*.*',
-                '<%= conf.path.SrcJS %>/**.*',
-                '<%= conf.path.SrcCSS %>/*.css',
-                '<%= conf.path.BuildRoot %>/**.*'],
-        tasks: ['dev'],
-       },        
-      stylesheets: {
-        files: ['<%= conf.path.SrcSass %>/*.*',
-                '<%= conf.path.SrcJS %>/**.*',
-                '<%= conf.path.SrcCSS %>/*.css',
-                '<%= conf.path.BuildRoot %>/**.*'],
-        tasks: ['dev'],
-     }         
-    },
-  
-        // options: {
-        //   livereload: true,
-        //   spawn: false,
-        // },
-
-    /* ------    DEV    ------ */
-
-    // Serveur de Dev
-    connect: {
-      server: {
-        options: {
-          debug: true,
-          port: 9001,
-          base: '../src',
-          hostname: 'localhost',
-          keepalive:false,
-          livereload:true,
-          open:true,
-        },
-      }
-    },
-
-    // Compass config
-    compass: {
-      dist: {
-        options: {
-          basePath: '<%= conf.path.SrcRoot %>',
-          config: '<%= conf.path.SassCfg %>'
-          //config: '../src/config.rb'
-
-        },
-      }
-    },
-
-    // Je vérifie ton code HTML
-    htmlhint: {
-      build: {
+      scripts: {
+        files: ['<%= conf.path.SrcSass %>/goblal.scss',],
+        tasks: ['sass'],
           options: {
-              'tag-pair': true,
-              'tagname-lowercase': true,
-              'attr-lowercase': true,
-              'attr-value-double-quotes': true,
-              'doctype-first': true,
-              'spec-char-escape': true,
-              'id-unique': true,
-              'head-script-disabled': true,
-              'style-disabled': true
+            spawn: false,
           },
-          src: ['*.html','<%= conf.path.SrcRoot %>/*.html']
+       }        
+    },
+ 
+     //  javascripts: {
+     //    files: ['<%= conf.path.SrcSass %>/*.*',
+     //            '<%= conf.path.SrcJS %>/**.*',
+     //            '<%= conf.path.SrcCSS %>/*.css',
+     //            '<%= conf.path.BuildRoot %>/**.*'],
+     //            tasks: ['dev'],
+
+     // }         
+    // },
+  
+    sass: {                                 // Task
+      dist: {                             // Target
+        files: {                        // Dictionary of files
+            '<%= conf.path.BuildCSS %>/styles.css': '<%= conf.path.SrcSass %>/gobal.scss'   // 'destination': 'source'
+        }
       }
     },
-
 
     // Je vérifie tes CSS
     csslint: {
@@ -165,7 +122,7 @@ module.exports = function(grunt) {
   }
     },
 
-    //  Je te Minifie ta CSS //   attention à la cascade
+    //  Je te Minifie ta CSS //  attention à la cascade
     cssmin: {
       minify: {
         expand: true,
@@ -221,23 +178,6 @@ module.exports = function(grunt) {
       },
     },
 
-    // Je minifie tes fichiers HTML
-    htmlmin: {                                     
-      build: {                                      
-        options: {                                 
-          collapseBooleanAttributes:true,
-          removeAttributeQuotes:false,
-          removeRedundantAttributes:true,
-          removeOptionalTags:true,
-          collapseWhitespace:true,
-          banner: '\n/* htmlmin */\n<%= conf.banner %>'
-        },
-        expand: true,
-        cwd: '<%= conf.path.BuildRoot %>/',
-        src: ['*.html'],
-        dest: '<%= conf.path.BuildRoot %>/',
-      }
-    },
 
     // J'optimise tes images
     imagemin: { 
@@ -259,12 +199,13 @@ module.exports = function(grunt) {
 
   // Enregistrements des tâches
   // grunt.registerTask('launch', ['devUpdate','connect','watch']);
-  grunt.registerTask('default', ['devUpdate','connect','watch']);
-  grunt.registerTask('dev', ['compass','htmlhint','jshint','csslint']);
-  grunt.registerTask('server', ['connect','watch']);
-  grunt.registerTask('build', ['clean:build','copy','imagemin', 'uglify','concat','clean:javascripts','cssmin','clean:stylesheets','preprocess']);
-  grunt.registerTask('img', ['clean:images']);
-
+  // grunt.registerTask('default', ['devUpdate','connect','watch']);
+  grunt.registerTask('dev', ['watch']);  
+  grunt.registerTask('stylesheets', ['sass']);  
+  // grunt.registerTask('dev', ['compass','jshint','csslint']);
+  // grunt.registerTask('server', ['connect','watch']);
+  // grunt.registerTask('build', ['clean:build','copy','imagemin', 'uglify','concat','clean:javascripts','cssmin','clean:stylesheets','preprocess']);
+  // grunt.registerTask('img', ['clean:images']);
 
 
 };
