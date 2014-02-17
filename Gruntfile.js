@@ -41,7 +41,7 @@ module.exports = function(grunt) {
     // Je te Watch et je déclanche toutes les tâches
     watch: {
       scripts: {
-        files: ['<%= conf.path.SrcSass %>/goblal.scss',],
+        files: ['<%= conf.path.SrcSass %>/global.scss'],
         tasks: ['sass'],
           options: {
             spawn: false,
