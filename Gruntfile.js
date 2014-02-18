@@ -11,11 +11,11 @@ module.exports = function(grunt) {
       path: { 
         // SrcRoot: '../src/',                                 // Root du dossier Sources
         SrcFont: '../fonts',                                   // Font Directory
-        BuildImg: '../images/build',                           // Build Images
-        SrcImg: '../images/sources',                           // Sources Images
-        BuildJS: '../javascripts/build',                       // Build Javascript
-        SrcJS: '../javascripts/src',                           // Sources Javascript
-        VenJS: '../javascripts/lib',                           // Vendor Javascript sources
+        BuildImg: '../img/build',                           // Build Images
+        SrcImg: '../img/sources',                           // Sources Images
+        BuildJS: '../js/build',                       // Build Javascript
+        SrcJS: '../js/src',                           // Sources Javascript
+        VenJS: '../js/lib',                           // Vendor Javascript sources
         BuildCSS: '../stylesheets/build',                      // Build CSS
         SrcSass: '../stylesheets',                             // Sources Sass
         VenCSS: '../stylesheets/lib',                          // Build CSS
