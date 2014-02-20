@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   // Load all tasks thanks to 'load-grunt-tasks' plug-in
   require('load-grunt-tasks')(grunt);
+  require('time-grunt')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -11,22 +12,22 @@ module.exports = function(grunt) {
       path: { 
         // SrcRoot: '../src/',                                 // Root du dossier Sources
         SrcFont: '../fonts',                                   // Font Directory
-        BuildImg: '../img/build',                           // Build Images
-        SrcImg: '../img/sources',                           // Sources Images
-        BuildJS: '../js/build',                       // Build Javascript
-        SrcJS: '../js/src',                           // Sources Javascript
-        VenJS: '../js/lib',                           // Vendor Javascript sources
-        BuildCSS: '../stylesheets/build',                      // Build CSS
+        BuildImg: '../img/',                                  // Build Images
+        SrcImg: '../img/src',                                 // Sources Images
+        BuildJS: '../js/',                                     // Build Javascript
+        SrcJS: '../js/src',                                   // Sources Javascript
+        VenJS: '../js/lib',                                   // Vendor Javascript sources
+        BuildCSS: '../',                                      // Build CSS
         SrcSass: '../stylesheets',                             // Sources Sass
         VenCSS: '../stylesheets/lib',                          // Build CSS
-        // CompassCSS '<%= conf.path.VenCSS %>/compass',       // Compass directory
-        // CompassCfg: '<%= conf.path.CompassCSS %>config.rb', // Fichier de config de Compass
       },
       
       banner: '/* <%=pkg.name %> - v<%= pkg.version %>\n'+
       ' * Author:<%= pkg.author %>\n'+
       ' * <%= grunt.template.today("mm-dd-yyyy, HH:MM:ss") %> */\n'
     },
+
+    /* ------    PLUG-IN UPDATE    ------ */
 
     // Vérification des mises à jour des plugin
     devUpdate: {
@@ -37,106 +38,78 @@ module.exports = function(grunt) {
         }
       }
     },
+    
 
-    // Je te Watch et je déclanche toutes les tâches
+    /* ------    WATCHER    ------ */
+    
     watch: {
-      scripts: {
-        files: ['<%= conf.path.SrcSass %>/global.scss'],
-        tasks: ['sass'],
+      stylesheets: {
+        files: ['<%= conf.path.SrcSass %>/style.scss'],
+        tasks: ['devSass'],
           options: {
             spawn: false,
           },
        }        
     },
- 
-     //  javascripts: {
-     //    files: ['<%= conf.path.SrcSass %>/*.*',
-     //            '<%= conf.path.SrcJS %>/**.*',
-     //            '<%= conf.path.SrcCSS %>/*.css',
-     //            '<%= conf.path.BuildRoot %>/**.*'],
-     //            tasks: ['dev'],
 
-     // }         
-    // },
-  
-    sass: {                                 // Task
-      dist: {                             // Target
-        files: {                        // Dictionary of files
-            '<%= conf.path.BuildCSS %>/styles.css': '<%= conf.path.SrcSass %>/gobal.scss'   // 'destination': 'source'
+ 
+    /* ------    CSS BUILDER    ------ */
+
+    // Sass lib
+    sass: {                                 
+      dist: {                               
+        files: {                           
+            '<%= conf.path.BuildCSS %>/style.css': '<%= conf.path.SrcSass %>/style.scss'   // 'destination': 'source'
         }
       }
     },
 
-    // Je vérifie tes CSS
+    // CSS Lint
     csslint: {
       lax: {
         options: {
           csslintrc: '.csslintrc',
         },
-        src: '<%= conf.path.SrcCSS %>/*.css',
+        src: '<%= conf.path.BuildCSS %>/style.css',
       }
     },
 
-    // Je vérifie tes JS
+    //  CSS Minification
+    cssmin: {
+      minify: {
+        files: {
+          '<%= conf.path.BuildCSS %>/style.min.css': '<%= conf.path.BuildCSS %>/style.css' // 'destination': 'source'
+        },
+        options: {
+          report:'min',
+          banner: '\n/* minify */\n<%= conf.banner %>',
+        },
+      }
+    },
+
+
+    /* ------    JS BUILDER    ------ */
+
+    // JS Concat
+    concat: {
+      options: {
+        separator: ';',
+        banner: '/* concat */\n<%= conf.banner %>'
+      },
+      js: {
+        src: ['<%= conf.path.BuildJS %>/*.min.js', '<%= conf.path.BuildJS %>/**/*.min.js'],
+        dest: '<%= conf.path.BuildJS %>/scripts.min.js',
+      },
+    },
+
+   // JS hint
     jshint: {
       all: {
         src: '<%= conf.path.SrcJS %>/*.js',
       }
     },
-
-    /* ------    BUILD    ------ */
-
-    // Cleanage du repertoire build
-    clean: {
-      build: {
-        src: '<%= conf.path.BuildRoot %>/'
-      },
-      
-      stylesheets: {
-        expand: true,
-        cwd: '<%= conf.path.BuildCSS %>/',
-        src: ['*.css', '**/*.css', '!*.min.css','!**/*.min.css'],
-      },
-      
-      javascripts: {
-        expand: true,
-        cwd: '<%= conf.path.BuildJS %>/',
-        src: ['*', '!scripts.min.js']
-      },
-
-      images: {
-        expand: true,
-        cwd: '<%= conf.path.BuildImg %>/',
-        src: ['*', '!scripts.min.js']
-      },
-    },
-
-
-    // Copie du repertoire sources vers le build
-    copy: {
-    build: {
-      expand: true,
-        cwd: '<%= conf.path.SrcRoot %>',
-        src: [ '**', '!config.rb', '!sass'],
-        dest: '<%= conf.path.BuildRoot %>',
-  }
-    },
-
-    //  Je te Minifie ta CSS //  attention à la cascade
-    cssmin: {
-      minify: {
-        expand: true,
-        cwd: '<%= conf.path.BuildCSS %>/',
-        src: ['*.css', '**/*.css'],
-        dest: '<%= conf.path.BuildCSS %>/',
-        ext: '.min.css',
-        options: {
-          banner: '\n/* minify */\n<%= conf.banner %>'
-        },
-      }
-    },
-
-    // Je t'Uglify ton Javascript
+ 
+    // JS Uglify
     uglify: {
       build: {
         expand: true,
@@ -151,16 +124,22 @@ module.exports = function(grunt) {
       }
     },
 
-    // Je concatènes tes fichiers JS
-    concat: {
-      options: {
-        separator: ';',
-        banner: '/* concat */\n<%= conf.banner %>'
-      },
-      js: {
-        src: ['<%= conf.path.BuildJS %>/*.min.js', '<%= conf.path.BuildJS %>/**/*.min.js'],
-        dest: '<%= conf.path.BuildJS %>/scripts.min.js',
-      },
+    /* ------    BUILD    ------ */
+
+    // Image Optimazation
+    imagemin: { 
+      build: {                                  // Task
+          options: {                            // Target options
+            optimizationLevel: 7,
+            progressive: true,
+            interlaced: true,
+            pngquant:true,
+          },
+          expand: true,                         // Enable dynamic expansion
+          cwd: '<%= conf.path.BuildImg %>/',    // Src matches are relative to this path
+          src: ['**/*.{png,jpg,gif}'],          // Actual patterns to match
+          dest: '<%= conf.path.BuildImg %>/',   // Destination path prefix
+      }
     },
 
     // Je process tes fichiers HTML
@@ -178,34 +157,19 @@ module.exports = function(grunt) {
       },
     },
 
-
-    // J'optimise tes images
-    imagemin: { 
-      build: {                                  // Task
-          options: {                            // Target options
-            optimizationLevel: 7,
-            progressive: true,
-            interlaced: true,
-            pngquant:true,
-          },
-          expand: true,                         // Enable dynamic expansion
-          cwd: '<%= conf.path.BuildImg %>/',    // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}'],          // Actual patterns to match
-          dest: '<%= conf.path.BuildImg %>/',   // Destination path prefix
-      }
-    },
-
   });
 
   // Enregistrements des tâches
   // grunt.registerTask('launch', ['devUpdate','connect','watch']);
   // grunt.registerTask('default', ['devUpdate','connect','watch']);
-  grunt.registerTask('dev', ['watch']);  
+  // grunt.registerTask('watch', ['watch:stylesheets']);  
+  grunt.registerTask('update', ['devUpdate']);
+  grunt.registerTask('devSass', ['sass','csslint','cssmin']);  
   grunt.registerTask('stylesheets', ['sass']);  
+  grunt.registerTask('build', ['imagemin']);
   // grunt.registerTask('dev', ['compass','jshint','csslint']);
   // grunt.registerTask('server', ['connect','watch']);
   // grunt.registerTask('build', ['clean:build','copy','imagemin', 'uglify','concat','clean:javascripts','cssmin','clean:stylesheets','preprocess']);
   // grunt.registerTask('img', ['clean:images']);
-
 
 };
