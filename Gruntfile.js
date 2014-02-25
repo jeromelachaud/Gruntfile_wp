@@ -16,7 +16,7 @@ module.exports = function(grunt) {
         SrcImg: '../img/src',                                 // Sources Images
         BuildJS: '../js/',                                     // Build Javascript
         SrcJS: '../js/src',                                   // Sources Javascript
-        VenJS: '../js/lib',                                   // Vendor Javascript sources
+        LibJS: '../js/src/lib',                                   // Vendor Javascript sources
         BuildCSS: '../',                                      // Build CSS
         SrcSass: '../stylesheets',                             // Sources Sass
         VenCSS: '../stylesheets/lib',                          // Build CSS
@@ -91,36 +91,41 @@ module.exports = function(grunt) {
     /* ------    JS BUILDER    ------ */
 
     // JS Concat
-    concat: {
-      options: {
-        separator: ';',
-        banner: '/* concat */\n<%= conf.banner %>'
-      },
-      js: {
-        src: ['<%= conf.path.BuildJS %>/*.min.js', '<%= conf.path.BuildJS %>/**/*.min.js'],
-        dest: '<%= conf.path.BuildJS %>/scripts.min.js',
-      },
-    },
+    // concat: {
+    //   options: {
+    //     separator: ';',
+    //     banner: '/* concat */\n<%= conf.banner %>'
+    //   },
+    //   js: {
+    //     src: ['<%= conf.path.BuildJS %>/*.min.js', '<%= conf.path.BuildJS %>/**/*.min.js'],
+    //     dest: '<%= conf.path.BuildJS %>/scripts.min.js',
+    //   },
+    // },
 
-   // JS hint
-    jshint: {
-      all: {
-        src: '<%= conf.path.SrcJS %>/*.js',
-      }
-    },
- 
     // JS Uglify
     uglify: {
       build: {
-        expand: true,
-        cwd: '<%= conf.path.BuildJS %>/',
-        src: ['*.js', '**/*.js'],
-        dest: '<%= conf.path.BuildJS %>/',
-        ext: '.min.js',
-        options: {
-          banner: '\n/* uglify */\n<%= conf.banner %>',
-          report: 'min'
+        files : {
+          '<%= conf.path.BuildJS %>/scripts.min.js': [
+          '<%= conf.path.SrcJS %>/*.js', 
+          '<%= conf.path.SrcJS %>/*.min.js', 
+          // '<%= conf.path.LibJS %>/*.js'
+          // '<%= conf.path.LibJS %>/*.min.js',
+          ]
         },
+      options: {
+        banner: '\n/* uglify */\n<%= conf.banner %>',
+        report: 'min'
+        },
+      }
+    },
+
+
+
+       // JS hint
+    jshint: {
+      all: {
+        src: '<%= conf.path.SrcJS %>/*.js',
       }
     },
 
@@ -158,13 +163,14 @@ module.exports = function(grunt) {
     },
 
   });
-
   // Enregistrements des tâches
   // grunt.registerTask('launch', ['devUpdate','connect','watch']);
   // grunt.registerTask('default', ['devUpdate','connect','watch']);
   // grunt.registerTask('watch', ['watch:stylesheets']);  
   grunt.registerTask('update', ['devUpdate']);
   grunt.registerTask('devSass', ['sass','csslint','cssmin']);  
+  grunt.registerTask('devJS', ['concat','jshint']);  
+
   grunt.registerTask('stylesheets', ['sass']);  
   grunt.registerTask('build', ['imagemin']);
   // grunt.registerTask('dev', ['compass','jshint','csslint']);
