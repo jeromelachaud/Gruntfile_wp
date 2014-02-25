@@ -90,23 +90,12 @@ module.exports = function(grunt) {
 
     /* ------    JS BUILDER    ------ */
 
-    // JS Concat
-    // concat: {
-    //   options: {
-    //     separator: ';',
-    //     banner: '/* concat */\n<%= conf.banner %>'
-    //   },
-    //   js: {
-    //     src: ['<%= conf.path.BuildJS %>/*.min.js', '<%= conf.path.BuildJS %>/**/*.min.js'],
-    //     dest: '<%= conf.path.BuildJS %>/scripts.min.js',
-    //   },
-    // },
-
     // JS Uglify
     uglify: {
       build: {
         files : {
           '<%= conf.path.BuildJS %>/scripts.min.js': [
+          
           '<%= conf.path.SrcJS %>/*.js', 
           '<%= conf.path.SrcJS %>/*.min.js', 
           // '<%= conf.path.LibJS %>/*.js'
@@ -121,8 +110,7 @@ module.exports = function(grunt) {
     },
 
 
-
-       // JS hint
+    // JS hint
     jshint: {
       all: {
         src: '<%= conf.path.SrcJS %>/*.js',
@@ -170,7 +158,6 @@ module.exports = function(grunt) {
   grunt.registerTask('update', ['devUpdate']);
   grunt.registerTask('devSass', ['sass','csslint','cssmin']);  
   grunt.registerTask('devJS', ['concat','jshint']);  
-
   grunt.registerTask('stylesheets', ['sass']);  
   grunt.registerTask('build', ['imagemin']);
   // grunt.registerTask('dev', ['compass','jshint','csslint']);
