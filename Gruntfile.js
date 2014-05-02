@@ -135,20 +135,17 @@ module.exports = function(grunt) {
       }
     },
 
-    // Je process tes fichiers HTML
-    preprocess : {
-      html : {
-        expand: true,
-        cwd: '<%= conf.path.BuildRoot %>/',
-        src: ['*.html'],
-        dest: '<%= conf.path.BuildRoot %>/',
+
+
+    // Grun concurrent 
+    concurrent: {
+      target: {
+          tasks: ['devSass', 'watch'],
           options: {
-            context : {
-              NODE_ENV : 'PRODUCTION'
+              logConcurrentOutput: true
           }
-        },
-      },
-    },
+      }
+    }
 
   });
   // Enregistrements des tâches
@@ -160,6 +157,7 @@ module.exports = function(grunt) {
   grunt.registerTask('devJS', ['concat','jshint']);  
   grunt.registerTask('stylesheets', ['sass']);  
   grunt.registerTask('build', ['imagemin']);
+  grunt.registerTask('concurrent', ['concurrent:target']);
   // grunt.registerTask('dev', ['compass','jshint','csslint']);
   // grunt.registerTask('server', ['connect','watch']);
   // grunt.registerTask('build', ['clean:build','copy','imagemin', 'uglify','concat','clean:javascripts','cssmin','clean:stylesheets','preprocess']);
