@@ -7,19 +7,19 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    // Déclartion des répertoires
+    // Repositories
     conf: {
       path: { 
-        // SrcRoot: '../src/',                                 // Root du dossier Sources
-        SrcFont: '../fonts',                                   // Font Directory
-        BuildImg: '../img/',                                  // Build Images
-        SrcImg: '../img/src',                                 // Sources Images
-        BuildJS: '../js/',                                     // Build Javascript
-        SrcJS: '../js/src',                                   // Sources Javascript
-        LibJS: '../js/src/lib',                                   // Vendor Javascript sources
-        BuildCSS: '../',                                      // Build CSS
-        SrcSass: '../stylesheets',                             // Sources Sass
-        VenCSS: '../stylesheets/lib',                          // Build CSS
+        // SrcRoot: '../src/',          // Root du dossier Sources
+        SrcFont: '../fonts',            // Font Directory
+        BuildImg: '../img/',            // Build Images
+        SrcImg: '../img/src',           // Sources Images
+        BuildJS: '../js/',              // Build Javascript
+        SrcJS: '../js/src',             // Sources Javascript
+        LibJS: '../js/src/lib',         // Vendor Javascript sources
+        BuildCSS: '../',                // Build CSS
+        SrcSass: '../stylesheets',      // Sources Sass
+        VenCSS: '../stylesheets/lib',   // Build CSS
       },
       
       banner: '/* <%=pkg.name %> - v<%= pkg.version %>\n'+
@@ -29,7 +29,6 @@ module.exports = function(grunt) {
 
     /* ------    PLUG-IN UPDATE    ------ */
 
-    // Vérification des mises à jour des plugin
     devUpdate: {
       main: {
         options: {
@@ -39,7 +38,6 @@ module.exports = function(grunt) {
       }
     },
     
-
     /* ------    WATCHER    ------ */
     
     watch: {
@@ -51,7 +49,6 @@ module.exports = function(grunt) {
           },
        }        
     },
-
  
     /* ------    CSS BUILDER    ------ */
 
@@ -87,8 +84,7 @@ module.exports = function(grunt) {
       }
     },
 
-
-    /* ------    JS BUILDER    ------ */
+    /* ------    JS    ------ */
 
     // JS Uglify
     uglify: {
@@ -98,8 +94,6 @@ module.exports = function(grunt) {
           
           '<%= conf.path.SrcJS %>/*.js', 
           '<%= conf.path.SrcJS %>/*.min.js', 
-          // '<%= conf.path.LibJS %>/*.js'
-          // '<%= conf.path.LibJS %>/*.min.js',
           ]
         },
       options: {
@@ -108,7 +102,6 @@ module.exports = function(grunt) {
         },
       }
     },
-
 
     // JS hint
     jshint: {
@@ -135,9 +128,7 @@ module.exports = function(grunt) {
       }
     },
 
-
-
-    // Grun concurrent 
+    // Grunt concurrent 
     concurrent: {
       target: {
           tasks: ['devSass', 'watch'],
@@ -148,19 +139,12 @@ module.exports = function(grunt) {
     }
 
   });
-  // Enregistrements des tâches
-  // grunt.registerTask('launch', ['devUpdate','connect','watch']);
-  // grunt.registerTask('default', ['devUpdate','connect','watch']);
-  // grunt.registerTask('watch', ['watch:stylesheets']);  
+  // Registering tasks
   grunt.registerTask('update', ['devUpdate']);
   grunt.registerTask('devSass', ['sass','csslint','cssmin']);  
   grunt.registerTask('devJS', ['concat','jshint']);  
   grunt.registerTask('stylesheets', ['sass']);  
   grunt.registerTask('build', ['imagemin']);
   grunt.registerTask('concurrent', ['concurrent:target']);
-  // grunt.registerTask('dev', ['compass','jshint','csslint']);
-  // grunt.registerTask('server', ['connect','watch']);
-  // grunt.registerTask('build', ['clean:build','copy','imagemin', 'uglify','concat','clean:javascripts','cssmin','clean:stylesheets','preprocess']);
-  // grunt.registerTask('img', ['clean:images']);
 
 };
